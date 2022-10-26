@@ -1,0 +1,61 @@
+server:
+  port: 8086
+
+spring:
+
+  messages:
+    fallback-to-system-locale: false
+    basename: i18n/messages
+
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+
+  kafka:
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.BytesDeserializer
+      group-id: car-search-service
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+security:
+  rsa:
+    key:
+      public: classpath:key.public
+  jwt:
+    claim:
+      type: type
+      role: role
+
+kafka:
+  topic:
+    booking:
+      create: booking-create
+      approve: booking-approve
+      decline: booking-decline
+      abort: booking-abort
+      complete:
+        normal: booking-normal-completion
+        delayed: booking-delayed-completion
+        damaged: booking-damaged-completion
+    mail: mail
+    car:
+      create: car-create
+      update: car-update
+      update-price: car-price-update
+
+booking:
+  min-advance-hours: 2
+  min-range-hours: 6
+
+logging:
+  level:
+    org.apache.kafka: WARN
+    org.springframework.kafka: WARN
+    tracer: TRACE

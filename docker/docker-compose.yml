@@ -1,0 +1,70 @@
+version: "3.0"
+
+services:
+  car-rental-cars-db:
+    image: postgres:12.3
+    container_name: car-rental-cars-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: car-rental-cars-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  car-rental-users-db:
+    image: postgres:12.3
+    container_name: car-rental-users-db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: car-rental-users-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  car-rental-billing-db:
+    image: postgres:12.3
+    container_name: car-rental-billing-db
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: car-rental-billing-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  car-rental-booking-db:
+    image: postgres:12.3
+    container_name: car-rental-booking-db
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_DB: car-rental-booking-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+    ports:
+      - "9200:9200"
+    environment:
+      - xpack.security.enabled=false
+      - "discovery.type=single-node"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  kafka:
+    image: confluentinc/cp-kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1

@@ -1,0 +1,18 @@
+package com.mcarrental.carsearchservice.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
+
+@Configuration
+public class GlobalConfig {
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
+        resolver.setDefaultLocale(LocaleSupport.DEFAULT_LOCALE);
+        resolver.setSupportedLocales(LocaleSupport.SUPPORTED_LOCALES);
+        return resolver;
+    }
+}

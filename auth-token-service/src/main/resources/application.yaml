@@ -1,0 +1,22 @@
+server:
+  port: 8083
+
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+
+security:
+  rsa:
+    key:
+      public: classpath:key.public
+      private: classpath:key.private
+  jwt:
+    claim:
+      type: type
+      role: role
+    expiry:
+      access-token: 3
+      refresh-token: 24

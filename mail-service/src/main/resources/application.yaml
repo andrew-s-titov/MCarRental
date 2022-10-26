@@ -1,0 +1,70 @@
+server.port: 8085
+
+spring:
+
+  profiles:
+    default: dev
+
+  messages:
+    basename: i18n/messages
+    fallback-to-system-locale: false
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: andrew.s.titov@gmail.com
+    password: abcdefghijklmnop
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+
+  kafka:
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.BytesDeserializer
+      group-id: mail-service
+
+security:
+  email-verification:
+    ttl-hours: 3
+  reset-password:
+    ttl-minutes: 10
+
+kafka:
+  topic:
+    booking:
+      create: booking-create
+      approve: booking-approve
+      decline: booking-decline
+      abort: booking-abort
+    user:
+      email-verification: user-email-verification
+      password-reset: user-password-reset
+
+mail:
+  from: noreply@minskcarrental.by
+  app-name: Minsk Car Rental
+  template:
+    arg:
+      message-parts: messageParts
+      links: links
+      logo: logo
+
+logging:
+  level:
+    org.apache.kafka: WARN
+    org.springframework.kafka: WARN
+
+external:
+  url:
+    user-service:
+      email-by-id:        http://localhost:8082/user/email
+      email-verification: http://localhost:8082/auth/verify
+      new-password:       http://localhost:8082/auth/password_reset
+    booking-service:
+      booking-info:       http://localhost:8081/booking
+    car-service:
+      short-info:         http://localhost:8080/car/{carId}/short

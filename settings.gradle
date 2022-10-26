@@ -1,0 +1,10 @@
+rootProject.name = 'minsk-car-rental'
+
+include 'auth-token-service'
+include 'billing-service'
+include 'car-service'
+include 'mail-service'
+include 'user-service'
+include 'booking-service'
+include 'car-search-service'
+

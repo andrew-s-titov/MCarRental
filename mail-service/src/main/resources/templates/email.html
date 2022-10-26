@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Template for HTML email</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body style="font-family: Arial, serif; background-color: #f3f3f3; padding: 10px; width: 500px">
+<p th:each="message : ${messageParts}">
+    <span th:text="${message}" style="font-size: 17px; color: #00437a">
+        Message body part1
+    </span>
+</p>
+
+<table th:if="not ${links.isEmpty()}" style="margin-right: auto; margin-left: auto">
+    <tr th:each="link : ${links}" >
+        <td>
+            <a style="background-color: #e2f6ff;
+        color: #00437a;
+        display: block;
+        font-size: 17px;
+        text-align: center;
+        text-decoration: none;
+        margin: 0;
+        border-style: none;
+        width: 300px;
+        padding-top: 5px; padding-bottom: 5px;
+        cursor: pointer;"
+               th:href="${link.value}" href="https://google.com" th:text="${link.key}">Some URL link</a>
+        </td>
+    </tr>
+</table>
+<br>
+<br>
+<p style="text-align: center">
+    <span th:text="#{mail.auto-generated}" style="font-size: 14px; font-style: italic; color: #00437a">
+        This email is generated automatically
+    </span>
+</p>
+
+<p>
+    <img src="../static/image/logo.png" th:src="|cid:${logo}|"
+         style="width: 300px; display: block; margin-left: auto; margin-right: auto"/>
+</p>
+
+<p style="text-align: center">
+    <span th:text="#{mail.regards}" style="font-weight: bold; font-size: 17px; color: #00437a" >
+        Best Regards,
+    </span>
+    <br>
+    <span th:text="'  ' + #{mail.signature}" style="font-style: italic; font-size: 17px; color: #00437a">
+        Team
+    </span>
+</p>
+</body>
+</html>
