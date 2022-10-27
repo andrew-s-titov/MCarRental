@@ -21,6 +21,7 @@ public class CustomElasticsearchRepoImpl implements CustomElasticsearchRepo<Car>
 
     private final ElasticsearchRestTemplate elastic;
 
+    @NonNull
     @Override
     public Page<Car> search(@NonNull QueryBuilder queryBuilder, @NonNull Pageable pageable) {
 
@@ -36,6 +37,6 @@ public class CustomElasticsearchRepoImpl implements CustomElasticsearchRepo<Car>
         SearchPage<Car> searchPage = SearchHitSupport.searchPageFor(searchHits, pageable);
         @SuppressWarnings("unchecked")
         Page<Car> page = (Page<Car>) SearchHitSupport.unwrapSearchHits(searchPage);
-        return page;
+        return page == null ? Page.empty() : page;
     }
 }

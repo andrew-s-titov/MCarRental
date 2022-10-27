@@ -1,6 +1,6 @@
 package com.mcarrental.jwtauthservice.service.impl;
 
-import com.mcarrental.jwtauthservice.security.Role;
+import com.mcarrental.jwtauthservice.dto.UserInfoDTO;
 import com.mcarrental.jwtauthservice.security.TokenType;
 import com.mcarrental.jwtauthservice.service.TokenCreator;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -30,27 +29,25 @@ public class JwtTokenCreatorImpl implements TokenCreator {
     private String tokenTypeClaimName = "type";
 
     @Override
-    public String createAccessToken(UUID userId, Role userRole) {
-        Instant now = Instant.now();
-        JwtClaimsSet claims = JwtClaimsSet.builder()
-                .issuedAt(now)
-                .expiresAt(now.plus(accessTokenExpiryHours, ChronoUnit.HOURS))
-                .subject(userId.toString())
-                .claim(roleClaimName, userRole)
-                .claim(tokenTypeClaimName, TokenType.ACCESS)
-                .build();
-        return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    public String createAccessToken(UserInfoDTO userInfo) {
+        return createJwt(userInfo, accessTokenExpiryHours, TokenType.ACCESS);
     }
 
     @Override
-    public String createRefreshToken(UUID userId, Role userRole) {
+    public String createRefreshToken(UserInfoDTO userInfo) {
+        return createJwt(userInfo, refreshTokenExpiryHours, TokenType.REFRESH);
+    }
+
+    private String createJwt(UserInfoDTO userInfo, Integer expiryHours, TokenType tokenType) {
+        var userId = userInfo.getUserId();
+        var userRole = userInfo.getUserRole();
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
-                .expiresAt(now.plus(refreshTokenExpiryHours, ChronoUnit.HOURS))
+                .expiresAt(now.plus(expiryHours, ChronoUnit.HOURS))
                 .subject(userId.toString())
                 .claim(roleClaimName, userRole)
-                .claim(tokenTypeClaimName, TokenType.REFRESH)
+                .claim(tokenTypeClaimName, tokenType)
                 .build();
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }

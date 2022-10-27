@@ -1,6 +1,6 @@
 package com.mcarrental.carservice.service.impl;
 
-import com.mcarrental.carservice.service.BookingServiceCaller;
+import com.mcarrental.carservice.service.BookingServiceClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
-public class RestBookingServiceCallerImpl implements BookingServiceCaller {
+public class BookingServiceRestClientImpl implements BookingServiceClient {
 
     private final RestTemplate restTemplate;
 

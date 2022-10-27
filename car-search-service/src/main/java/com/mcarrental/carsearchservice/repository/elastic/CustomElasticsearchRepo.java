@@ -7,5 +7,6 @@ import org.springframework.lang.NonNull;
 
 public interface CustomElasticsearchRepo<T> {
 
+    @NonNull
     Page<T> search(@NonNull QueryBuilder queryBuilder, @NonNull Pageable pageable);
 }

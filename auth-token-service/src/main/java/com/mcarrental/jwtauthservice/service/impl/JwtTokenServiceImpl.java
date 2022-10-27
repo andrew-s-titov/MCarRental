@@ -26,17 +26,17 @@ public class JwtTokenServiceImpl implements TokenService {
     private final TokenCreator tokenCreator;
 
     @Value("${security.jwt.claim.role}")
-    private String roleClaimName = "role";
+    private String roleClaimName;
     @Value("${security.jwt.claim.type}")
-    private String tokenTypeClaimName = "type";
+    private String tokenTypeClaimName;
 
     @Override
     @NonNull
     public SecurityTokensDTO createTokens(@NonNull UserInfoDTO userInfo) {
         Assert.notNull(userInfo, DEFAULT_NULL_MESSAGE);
 
-        String accessToken = tokenCreator.createAccessToken(userInfo.getUserId(), userInfo.getUserRole());
-        String refreshToken = tokenCreator.createRefreshToken(userInfo.getUserId(), userInfo.getUserRole());
+        var accessToken = tokenCreator.createAccessToken(userInfo);
+        var refreshToken = tokenCreator.createRefreshToken(userInfo);
 
         return new SecurityTokensDTO(accessToken, refreshToken);
     }
@@ -44,23 +44,23 @@ public class JwtTokenServiceImpl implements TokenService {
     @Override
     @NonNull
     public UserInfoDTO userInfo(@NonNull JwtAuthenticationToken jwtAuthToken) {
-        Assert.notNull(jwtAuthToken, DEFAULT_NULL_MESSAGE);
-
-        Jwt token = jwtAuthToken.getToken();
-        checkTokenType(token, TokenType.ACCESS);
-
-        return new UserInfoDTO(retrieveUserId(token), retrieveRole(token));
+        return getUserInfo(jwtAuthToken, TokenType.ACCESS);
     }
 
     @Override
     @NonNull
     public String refreshTokens(@NonNull JwtAuthenticationToken jwtAuthToken) {
+        UserInfoDTO userInfo = getUserInfo(jwtAuthToken, TokenType.REFRESH);
+        return tokenCreator.createAccessToken(userInfo);
+    }
+
+    @NonNull
+    private UserInfoDTO getUserInfo(@NonNull JwtAuthenticationToken jwtAuthToken, TokenType tokenType) {
         Assert.notNull(jwtAuthToken, DEFAULT_NULL_MESSAGE);
 
-        Jwt token = jwtAuthToken.getToken();
-        checkTokenType(token, TokenType.REFRESH);
-
-        return tokenCreator.createAccessToken(retrieveUserId(token), retrieveRole(token));
+        var jwt = jwtAuthToken.getToken();
+        checkTokenType(jwt, tokenType);
+        return new UserInfoDTO(retrieveUserId(jwt), retrieveRole(jwt));
     }
 
     private void checkTokenType(Jwt jwt, TokenType expectedType) {

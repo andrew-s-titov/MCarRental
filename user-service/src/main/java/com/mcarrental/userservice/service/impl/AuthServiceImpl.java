@@ -16,7 +16,7 @@ import com.mcarrental.userservice.repository.PasswordResetTokenRepository;
 import com.mcarrental.userservice.security.SecurityInfoManager;
 import com.mcarrental.userservice.security.SecurityTokensDTO;
 import com.mcarrental.userservice.security.UserInfoDTO;
-import com.mcarrental.userservice.service.AuthServerCaller;
+import com.mcarrental.userservice.service.AuthServiceClient;
 import com.mcarrental.userservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
     public static final String BASIC_DELIMITER = ":";
     private static final Charset basicCredentialsCharset = StandardCharsets.UTF_8;
 
-    private final AuthServerCaller authServerCaller;
+    private final AuthServiceClient authServiceClient;
     private final PasswordEncoder passwordEncoder;
     private final BaseUserRepository baseUserRepository;
     private final EmailVerificationRepository emailVerificationRepository;
@@ -70,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
     public SecurityTokensDTO basicLogin(HttpServletRequest request) {
         String basicStringToken = getDecodedBasicStringToken(request);
         UserInfoDTO user = authenticate(basicStringToken);
-        return authServerCaller.getTokens(user);
+        return authServiceClient.getTokens(user);
     }
 
     @Override

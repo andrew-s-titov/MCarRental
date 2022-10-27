@@ -1,12 +1,13 @@
 package com.mcarrental.carsearchservice.service.impl;
 
 import com.mcarrental.carsearchservice.dto.CarSearchRequestDTO;
-import com.mcarrental.carsearchservice.service.CarSearchRequestToQueryBuilderAdapter;
+import com.mcarrental.carsearchservice.service.SearchRequestToQueryConverter;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -19,7 +20,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
-public class CarSearchRequestToQueryBuilderAdapterImpl implements CarSearchRequestToQueryBuilderAdapter {
+public class SearchRequestToQueryConverterImpl implements SearchRequestToQueryConverter {
 
     private static final String BRAND_FIELD = "brand";
     private static final String TYPE_FIELD = "type";
@@ -33,8 +34,11 @@ public class CarSearchRequestToQueryBuilderAdapterImpl implements CarSearchReque
     private static final String START_FIELD = BOOKINGS_FIELDS + "." + "start";
     private static final String END_FIELD = BOOKINGS_FIELDS + "." + "end";
 
+    @NonNull
     @Override
-    public QueryBuilder convert(CarSearchRequestDTO searchRequest) {
+    public QueryBuilder convert(@NonNull CarSearchRequestDTO searchRequest) {
+        Assert.notNull(searchRequest, "search request cannot be null");
+
         BoolQueryBuilder query = new BoolQueryBuilder();
 
         addMustTermsInQuery(query, BRAND_FIELD, searchRequest.getBrands());
@@ -103,12 +107,6 @@ public class CarSearchRequestToQueryBuilderAdapterImpl implements CarSearchReque
     }
 
     private QueryBuilder computeFinalQuery(BoolQueryBuilder result) {
-        if (result.must().isEmpty()
-                && result.should().isEmpty()
-                && result.mustNot().isEmpty()
-                && result.filter().isEmpty()) {
-            return QueryBuilders.matchAllQuery();
-        }
-        return result;
+        return result.hasClauses() ? result : QueryBuilders.matchAllQuery();
     }
 }

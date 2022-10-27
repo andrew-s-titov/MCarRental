@@ -2,7 +2,7 @@ package com.mcarrental.userservice.service.impl;
 
 import com.mcarrental.userservice.security.SecurityTokensDTO;
 import com.mcarrental.userservice.security.UserInfoDTO;
-import com.mcarrental.userservice.service.AuthServerCaller;
+import com.mcarrental.userservice.service.AuthServiceClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
 @Service
-public class RestAuthServerCallerImpl implements AuthServerCaller {
+public class AuthServiceRestClientImpl implements AuthServiceClient {
 
     private final RestTemplate restTemplate;
     private final HttpMethod DEFAULT_AUTH_SERVER_METHOD = HttpMethod.POST;

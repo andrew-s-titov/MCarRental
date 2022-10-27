@@ -2,7 +2,7 @@ package com.mcarrental.userservice.service.impl;
 
 import com.mcarrental.userservice.event.EmailVerificationCreatedEvent;
 import com.mcarrental.userservice.event.PasswordResetEvent;
-import com.mcarrental.userservice.service.AuthMailSender;
+import com.mcarrental.userservice.service.AuthEventSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class AuthMailSenderImpl implements AuthMailSender {
+public class KafkaAuthEventSenderImpl implements AuthEventSender {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 

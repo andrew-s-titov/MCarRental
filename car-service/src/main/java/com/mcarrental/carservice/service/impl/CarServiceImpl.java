@@ -14,7 +14,7 @@ import com.mcarrental.carservice.model.Car;
 import com.mcarrental.carservice.repository.CarRepository;
 import com.mcarrental.carservice.security.Role;
 import com.mcarrental.carservice.security.SecurityInfoManager;
-import com.mcarrental.carservice.service.BookingServiceCaller;
+import com.mcarrental.carservice.service.BookingServiceClient;
 import com.mcarrental.carservice.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +38,7 @@ public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
     private final CarConverter converter;
     private final SecurityInfoManager securityInfoManager;
-    private final BookingServiceCaller bookingServiceCaller;
+    private final BookingServiceClient bookingServiceClient;
     private final ApplicationEventPublisher eventPublisher;
 
     @NonNull
@@ -131,7 +131,7 @@ public class CarServiceImpl implements CarService {
         securityInfoManager.checkOwnerOrClientRights(car.getOwnerId());
         boolean isActivated = car.isVisible();
         if (isActivated != visible) {
-            if (isActivated && bookingServiceCaller.carHasActiveBookings(carId)) {
+            if (isActivated && bookingServiceClient.carHasActiveBookings(carId)) {
                 throw new ConflictException("Cannot deactivate car with active bookings");
             }
             car.setVisible(visible);
@@ -146,7 +146,7 @@ public class CarServiceImpl implements CarService {
 
         var car = safeGetCar(carId);
         securityInfoManager.checkOwnerOrClientRights(car.getOwnerId());
-        boolean canBeDeleted = bookingServiceCaller.carHasActiveBookings(carId);
+        boolean canBeDeleted = bookingServiceClient.carHasActiveBookings(carId);
         if (!canBeDeleted) {
             throw new ConflictException("Cannot delete car with active bookings");
         }
