@@ -1,0 +1,29 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/car-rental-users-db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+
+  kafka.consumer.group-id: user-service
+
+security:
+  auth-server:
+    name: auth-token-service
+    url: /auth/private/tokens
+  email-verification:
+    ttl-hours: 3
+    code:
+      length: 15
+    max-hours: 72
+  reset-password:
+    ttl-minutes: 10
+    code:
+      length: 20
+
+cronjob:
+  user:
+    delete-unverified: 0 * * * *

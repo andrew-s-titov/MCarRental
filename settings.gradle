@@ -7,4 +7,6 @@ include 'mail-service'
 include 'user-service'
 include 'booking-service'
 include 'car-search-service'
+include 'config-server'
+include 'discovery-service'
 

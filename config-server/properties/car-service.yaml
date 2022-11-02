@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/car-rental-cars-db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+
+  kafka.consumer.group-id: car-service
+
+external:
+  booking-service:
+    name: booking-service
+    url.car-has-active-bookings: /booking/private/car/{carId}

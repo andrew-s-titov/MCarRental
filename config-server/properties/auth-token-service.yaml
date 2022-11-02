@@ -1,0 +1,11 @@
+server:
+  port: 8882
+
+security:
+  rsa:
+    key:
+      private: classpath:key.private
+  jwt:
+    expiry:
+      access-token: 3
+      refresh-token: 24

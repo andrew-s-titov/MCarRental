@@ -1,65 +1,7 @@
-server:
-  port: 8084
+config.host: localhost
+config.port: 8888
 
 spring:
-
-  messages:
-    fallback-to-system-locale: false
-    basename: i18n/messages
-
-  mvc:
-    throw-exception-if-no-handler-found: true
-  web:
-    resources:
-      add-mappings: false
-
-  datasource:
-    url: jdbc:postgresql://localhost:5434/car-rental-billing-db
-    driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: postgres
-
-  jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQL94Dialect
-    open-in-view: false
-
-  flyway:
-    locations: classpath:/db/migration
-
-  kafka:
-    consumer:
-      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      properties:
-        spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.BytesDeserializer
-      group-id: billing-service
-    producer:
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties:
-        spring.json.add.type.headers: false
-
-security:
-  rsa:
-    key:
-      public: classpath:key.public
-  jwt:
-    claim:
-      type: type
-      role: role
-
-kafka:
-  topic:
-    booking:
-      create: booking-create
-      approve: booking-approve
-      decline: booking-decline
-      abort: booking-abort
-    mail: mail
-
-logging:
-  level:
-    org.apache.kafka: WARN
-    org.springframework.kafka: WARN
+  application.name: billing-service
+  cloud.config.uri: http://${config.host}:${config.port}/
+  config.import: configserver:${spring.cloud.config.uri}

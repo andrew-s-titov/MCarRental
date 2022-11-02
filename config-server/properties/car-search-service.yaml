@@ -1,0 +1,11 @@
+server:
+  port: 8086
+
+spring:
+  kafka.consumer.group-id: car-search-service
+
+booking:
+  min-advance-hours: 2
+  min-range-hours: 6
+
+logging.level.tracer: TRACE

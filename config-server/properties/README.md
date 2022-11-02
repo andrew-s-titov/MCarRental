@@ -1,0 +1,2 @@
+This folder contains .yaml property files for project modules for use with Spring Cloud Server Config.  
+It's only *for demonstration purposes* - storing properties in git repo is definitely a better option.

@@ -1,0 +1,65 @@
+spring:
+  messages:
+    fallback-to-system-locale: false
+    basename: i18n/messages
+
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQL94Dialect
+    open-in-view: false
+
+  flyway:
+    locations: classpath:/db/migration
+
+  kafka:
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.BytesDeserializer
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+security:
+  rsa:
+    key:
+      public: classpath:key.public
+  jwt:
+    claim:
+      type: type
+      role: role
+
+kafka:
+  topic:
+    booking:
+      create: booking-create
+      approve: booking-approve
+      decline: booking-decline
+      abort: booking-abort
+      complete:
+        normal: booking-normal-completion
+        delayed: booking-delayed-completion
+        damaged: booking-damaged-completion
+    mail: mail
+    car:
+      create: car-create
+      update: car-update
+      update-price: car-price-update
+    user:
+      email-verification: user-email-verification
+      password-reset: user-password-reset
+
+logging:
+  level:
+    org.apache.kafka: WARN
+    org.springframework.kafka: WARN
