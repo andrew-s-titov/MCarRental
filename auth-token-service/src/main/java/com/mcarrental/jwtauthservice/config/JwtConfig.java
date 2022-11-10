@@ -14,8 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
@@ -28,8 +26,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.SecurityFilterChain;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -39,8 +35,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Configuration
 public class JwtConfig {
-
-    private final AuthenticationEntryPoint authenticationEntryPoint;
 
     @Value("${security.rsa.key.public}")
     private RSAPublicKey publicKey;
@@ -63,23 +57,6 @@ public class JwtConfig {
         final NimbusJwtDecoder decoder = NimbusJwtDecoder.withPublicKey(this.publicKey).build();
         decoder.setJwtValidator(tokenValidator());
         return decoder;
-    }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                .antMatcher("/auth/public/**")
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeHttpRequests()
-                .anyRequest().authenticated()
-                .and()
-                .oauth2ResourceServer(configurer -> {
-                    configurer.jwt();
-                    configurer.authenticationEntryPoint(authenticationEntryPoint);
-                })
-                .build();
     }
 
     private OAuth2TokenValidator<Jwt> tokenValidator() {

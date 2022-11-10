@@ -8,6 +8,8 @@ Technologies used:
 
 Frameworks:
 - Spring (Boot, MVC, WebFlux, Data, Security, AOP)
+- Spring Cloud (Configuration Server, Service Registration and Discovery, Netflix OpenFeign)
+- JUnit, Mockito (tests)
 
 Tools:
 - Docker

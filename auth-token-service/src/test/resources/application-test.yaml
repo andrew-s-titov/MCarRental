@@ -1,0 +1,11 @@
+eureka.client.enabled: false
+spring.cloud.config.discovery.enabled: false
+spring.cloud.config.enabled: false
+
+security.jwt.expiry.access-token: 3
+security.jwt.expiry.refresh-token: 24
+security.jwt.claim.type: type
+security.jwt.claim.role: role
+
+security.rsa.key.private: classpath:key.private
+security.rsa.key.public: classpath:key.public
