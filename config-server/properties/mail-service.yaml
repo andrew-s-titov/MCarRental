@@ -33,11 +33,10 @@ mail:
 external:
   url:
     user-service:
-      email-by-id:        http://localhost:8082/user/email
-      email-verification: http://localhost:8082/auth/verify
-      new-password:       http://localhost:8082/auth/password_reset
+      email-by-id:        http://user-service/user/email
+      email-verification: http://auth-token-service/auth/verify
+      new-password:       http://auth-token-service/auth/password_reset
     booking-service:
-      booking-info:       http://localhost:8081/booking
+      booking-info:       http://booking-service/booking
     car-service:
-      short-info:         http://localhost:8080/car/{carId}/short
-      # TODO: update when discovery service is on
+      short-info:         http://car-service/car/{carId}/short
