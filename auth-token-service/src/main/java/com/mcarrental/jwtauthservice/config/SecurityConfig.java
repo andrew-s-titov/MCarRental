@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @RequiredArgsConstructor
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     private final AuthenticationEntryPoint authenticationEntryPoint;

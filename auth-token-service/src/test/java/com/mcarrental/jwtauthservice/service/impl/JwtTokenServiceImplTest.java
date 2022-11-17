@@ -97,7 +97,7 @@ public class JwtTokenServiceImplTest {
     }
 
     @Test
-    @DisplayName("userInfo() with an invalid argument - should throw IAE")
+    @DisplayName("userInfo() with an invalid (null) argument - should throw IAE")
     public void userInfoTest_2() {
         // when & then
         assertThrows(IllegalArgumentException.class, () -> jwtTokenService.userInfo(null));
